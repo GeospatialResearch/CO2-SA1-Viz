@@ -13,7 +13,7 @@
       id="legend"
       class="card"
       :legend-steps="legendSteps"
-      axis-label="Total commuters"
+      axis-label="Total resident commuters"
     />
   </div>
 </template>

@@ -35,7 +35,7 @@ export default Vue.extend({
       plotLayout: {
         width: 450,
         title: {
-          text: "Number of commuters by mode share",
+          text: "Number of resident commuters by mode share",
           yref: 0,
           font: {
             color: '#ffffff'
