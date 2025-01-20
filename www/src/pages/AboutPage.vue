@@ -12,10 +12,10 @@
           <figure>
             <img
               class="img-fluid centre-block"
-              src="/dalle_image.png"
+              src="/carbonneutralAI.png"
               alt="Graphic of a carbon neutral neighbourhood"
             >
-            <figcaption class="centre-block">Figure made with DALĿE 2 (A.Prof. M. Campbell)</figcaption>
+            <figcaption class="centre-block">Figure made with AI (Prof. M. Campbell)</figcaption>
           </figure>
         </div>
       </div>
@@ -122,6 +122,19 @@
       design Aotearoa New Zealand’s urban centres to better enable low(er) carbon living.</i> (March 1, 2023).
       Available at SSRN: <a href="https://ssrn.com/abstract=4486347">https://ssrn.com/abstract=4486347</a> or
       <a href="https://dx.doi.org/10.2139/ssrn.4486347">https://dx.doi.org/10.2139/ssrn.4486347</a>.
+    </p>
+    <p>And</p>
+    <p>
+      Campbell, Malcolm <i>Working paper: "Up" vs "Out". Carbon emission scenario planning in Aotearoa New Zealand's
+      urban centres</i> (March 29, 2024). Available at SSRN:
+      <a href="https://ssrn.com/abstract=4887672">https://ssrn.com/abstract=4887672</a> or
+      <a href="http://dx.doi.org/10.2139/ssrn.4887672">http://dx.doi.org/10.2139/ssrn.4887672</a>.
+    </p>
+    <p>And</p>
+    <p>
+      Campbell, Malcolm <i>Working paper: Scenarios for carbon-neutral neighbourhoods in Aotearoa New Zealand's urban
+      centres. Sprawl or Densify?</i> (November 11, 2024). Available at SSRN:
+      <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5067893">https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5067893</a>.
     </p>
     <div class="row container-fluid">
       <div class="col-lg-12 col-md-12 col-xs-12 thumb">
