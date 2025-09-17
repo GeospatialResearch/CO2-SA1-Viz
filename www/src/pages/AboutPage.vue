@@ -23,8 +23,8 @@
     <h2>About the Visualisation</h2>
     <p>
       The tool itself currently has two key views: one is the emissions scenario visualisation; the other is the trends
-      in travel mode. There are several tabs; Auckland, Christchurch, Wellington, and Oamaru which show the patterns for
-      both emissions and transport in these places.
+      in travel mode. There are several tabs; Auckland, Hamilton, Wellington, Christchurch, Oamaru and Queenstown which
+      show the patterns for both emissions and transport in these places.
     </p>
     <h2>About the Emission Scenario Controller</h2>
     <p>
@@ -98,7 +98,7 @@
     <h2>About the Carbon Neutral Neighbourhood team</h2>
     <p>
       The Carbon Neutral Neighbourhood project is led by an interdisciplinary team at
-      <span class="text-nowrap">Te Whare Wānanga o Waitaha |University of Canterbury.</span>
+      <span class="text-nowrap">Te Whare Wānanga o Waitaha | University of Canterbury.</span>
       The team has analysed international examples of well-functioning cities, towns and neighbourhoods that have low
       greenhouse gas (GHG) emissions. We have put all these case studies together into digestible reports. See link
       here:
