@@ -171,6 +171,51 @@ def save_flow_map_sheets(engine: sqlalchemy.engine.Engine) -> None:
     flow_sheet_df.to_sql(flow_sheets_table_name, engine, if_exists="replace", index=True)
 
 
+def save_flow_map_sheets_2023(engine: sqlalchemy.engine.Engine) -> None:
+    if not EnvVariable.IS_FLOWMAP_ENABLED:
+        return
+    flow_sheets_table_name = "flow_sheets_2023"
+    if sqlalchemy.inspect(engine).has_table(flow_sheets_table_name):
+        log.info(f"Table {flow_sheets_table_name} exists, skipping.")
+        return
+    log.info(f"Initialising table {flow_sheets_table_name}.")
+
+    gspread_client = gspread.service_account_from_dict(EnvVariable.GOOGLE_CREDENTIALS)
+    flow_sheet_url_data = []
+    for aoi in stats_nz_geographies.AREAS_OF_INTEREST:
+        urban_area = aoi.ua_name
+        sa2_locations = find_sa2_locations(engine, urban_area)
+        flows = find_flows(engine, urban_area)
+        spreadsheet_name = f"flows_2023_{urban_area}"
+        flow_columns = [col for col in flows.columns if col not in {'origin', 'dest'}]
+        workbook_config_sheet = get_workbook_config_page(aoi.display_name, flow_columns)
+        num_attempts = 3
+        for attempt in range(num_attempts):
+            try:
+                sheet_url = save_flow_map_to_gsheet(gspread_client,
+                                                    spreadsheet_name,
+                                                    workbook_config_sheet,
+                                                    sa2_locations,
+                                                    flows,
+                                                    flow_columns)
+                flow_sheet_url_data.append({"urban_area": urban_area, "sheet_url": sheet_url})
+                break
+            except gspread.exceptions.APIError as e:
+                if attempt >= num_attempts - 1:
+                    raise gspread.exceptions.APIError from e
+                refresh_time = 500
+                progress_bar = tqdm(range(refresh_time),
+                                    desc="Google Sheets API limit hit, waiting for limit refresh...")
+                for _ in progress_bar:
+                    time.sleep(1)
+                    log_interval_s = 10
+                    if progress_bar.n % log_interval_s == 0:
+                        log.info(str(progress_bar))
+
+    flow_sheet_df = pd.DataFrame(flow_sheet_url_data).set_index("urban_area")
+    flow_sheet_df.to_sql(flow_sheets_table_name, engine, if_exists="replace", index=True)
+
+
 if __name__ == '__main__':
     engine = get_db_engine()
     save_flow_map_sheets(engine)

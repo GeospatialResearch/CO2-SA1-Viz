@@ -13,7 +13,7 @@
       id="control-card"
       class="card"
     >
-      <h2>Scenario Controller</h2>
+      <h2>CO2 Scenario Controller</h2>
       <p>
         Baseline CO2:
         <span class="value">{{ formattedTotals.baselineCo2 }}</span>

@@ -126,6 +126,29 @@ class ModeShareFlowInitialiser(ModeShareInitialiser):
         return self.set_suppressed_values_as_zero(mode_shares)
 
 
+class ModeShareFlow2023Initialiser(ModeShareFlowInitialiser):
+    sa2 = SA2(111227, "SA22023_V1_00", "SA22023_V1_00_NAME")
+    mode_share_table_name = "mode_share_flow_2023"
+
+    def find_mode_shares_in_areas_of_interest(self, sa2_ids: pd.DataFrame) -> pd.DataFrame:
+        mode_shares = pd.read_csv(Env.MEANS_OF_TRAVEL_2023_DATA)
+        # Drop info that is duplicated in SA2 table to keep data normalised
+        mode_shares = mode_shares.drop(columns=[
+            "SA2_name_usual_residence_address",
+            "SA2_usual_residence_easting",
+            "SA2_usual_residence_northing",
+            "SA2_name_workplace_address",
+            "SA2_workplace_easting",
+            "SA2_workplace_northing",
+        ])
+        mode_shares = mode_shares.loc[
+            mode_shares["SA2_code_usual_residence_address"].isin(sa2_ids.index)
+            & mode_shares["SA2_code_workplace_address"].isin(sa2_ids.index)]
+        mode_shares = mode_shares.set_index(["SA2_code_usual_residence_address", "SA2_code_workplace_address"],
+                                            verify_integrity=True)
+        return self.set_suppressed_values_as_zero(mode_shares)
+
+
 class ModeShare2023Initialiser(ModeShareInitialiser):
     sa2 = SA2(111227, "SA22023_V1_00", "SA22023_V1_00_NAME")
     mode_share_table_name = "mode_share_2023"
@@ -180,3 +203,4 @@ if __name__ == '__main__':
     engine = get_db_engine()
     ModeShareFlowInitialiser().initialise_mode_share(engine)
     ModeShare2023Initialiser().initialise_mode_share(engine)
+    ModeShareFlow2023Initialiser.initialise_mode_share(engine)

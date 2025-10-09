@@ -89,6 +89,7 @@ class EnvVariable:
     ADMIN_EMAIL = _get_env_variable("ADMIN_EMAIL", default="luke.parkinson@canterbury.ac.nz")
     EMISSIONS_DATA = pathlib.Path(_get_env_variable("EMISSIONS_DATA"))
     MEANS_OF_TRAVEL_DATA = pathlib.Path(_get_env_variable("MEANS_OF_TRAVEL_DATA"))
+    MEANS_OF_TRAVEL_2023_DATA = pathlib.Path(_get_env_variable("MEANS_OF_TRAVEL_2023_DATA"))
     MEANS_OF_TRAVEL_USUAL_RES_2023_DATA = pathlib.Path(_get_env_variable("MEANS_OF_TRAVEL_USUAL_RES_2023_DATA"))
     MEANS_OF_TRAVEL_WORKPLACE_2023_DATA = pathlib.Path(_get_env_variable("MEANS_OF_TRAVEL_WORKPLACE_2023_DATA"))
 
