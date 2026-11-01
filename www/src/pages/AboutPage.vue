@@ -74,7 +74,7 @@
     </div>
     <h2>About the Mode Share Visualiser</h2>
     <p>
-      The mode share tab visualises the transport patterns from the 2018 census for each of the cities and localities
+      The mode share tab visualises the transport patterns from the 2018 and 2023 censuses for each of the cities and localities
       listed above. There are active transport (e.g. Walking and Cycling), public transport (e.g. bus), Drive, Passenger
       and other categories to select to help you understand the most recent travel trends in the region of interest. The
       data is focused on travel to work. There is a box in the top right-hand corner of the window to allow users to

@@ -20,6 +20,15 @@ enum ModeShareFlowLocations {
   Wellington = "MODE_SHARE_FLOW_WELLINGTON"
 }
 
+enum ModeShareFlow2023Locations {
+  Auckland = "MODE_SHARE_FLOW_2023_AUCKLAND",
+  Hamilton = "MODE_SHARE_FLOW_2023_HAMILTON",
+  Christchurch = "MODE_SHARE_FLOW_2023_CHRISTCHURCH",
+  Oamaru = "MODE_SHARE_FLOW_2023_OAMARU",
+  Queenstown = "MODE_SHARE_FLOW_2023_QUEENSTOWN",
+  Wellington = "MODE_SHARE_FLOW_2023_WELLINGTON"
+}
+
 enum ModeShare2023Locations {
   Auckland = "MODE_SHARE_2023_AUCKLAND",
   Hamilton = "MODE_SHARE_2023_HAMILTON",
@@ -37,6 +46,7 @@ enum RootLocations {
 const RouterLocations = {
   Emissions: EmissionsLocations,
   ModeShareFlow: ModeShareFlowLocations,
+  ModeShareFlow2023: ModeShareFlow2023Locations,
   ModeShare2023: ModeShare2023Locations,
   Root: RootLocations,
 }
@@ -86,7 +96,7 @@ const routes: RouteConfig[] = [
     ]
   },
   {
-    path: "/mode-share-flow",
+    path: "/mode-share-flow-2018",
     component: pages.modeShareFlow.ModeShareBase,
     children: [
       {
@@ -122,6 +132,46 @@ const routes: RouteConfig[] = [
       {
         path: "*",
         redirect: {name: RouterLocations.ModeShareFlow.Christchurch}
+      }
+    ]
+  },
+  {
+    path: "/mode-share-flow-2023",
+    component: pages.modeShareFlow2023.ModeShareBase,
+    children: [
+      {
+        path: "auckland",
+        name: RouterLocations.ModeShareFlow2023.Auckland,
+        component: pages.modeShareFlow2023.Auckland
+      },
+      {
+        path: "hamilton",
+        name: RouterLocations.ModeShareFlow2023.Hamilton,
+        component: pages.modeShareFlow2023.Hamilton
+      },
+      {
+        path: "christchurch",
+        name: RouterLocations.ModeShareFlow2023.Christchurch,
+        component: pages.modeShareFlow2023.Christchurch
+      },
+      {
+        path: "wellington",
+        name: RouterLocations.ModeShareFlow2023.Wellington,
+        component: pages.modeShareFlow2023.Wellington
+      },
+      {
+        path: "oamaru",
+        name: RouterLocations.ModeShareFlow2023.Oamaru,
+        component: pages.modeShareFlow2023.Oamaru
+      },
+      {
+        path: "queenstown",
+        name: RouterLocations.ModeShareFlow2023.Queenstown,
+        component: pages.modeShareFlow2023.Queenstown
+      },
+      {
+        path: "*",
+        redirect: {name: RouterLocations.ModeShareFlow2023.Christchurch}
       }
     ]
   },

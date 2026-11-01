@@ -2,6 +2,9 @@
 .env*.local
 .env
 
+node_modules_old
+dist_old
+
 ### Node template
 # Logs
 logs

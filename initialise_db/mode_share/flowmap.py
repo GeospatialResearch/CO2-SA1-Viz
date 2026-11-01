@@ -48,6 +48,29 @@ def find_flows(engine: sqlalchemy.engine.Engine, urban_area_name: str) -> pd.Dat
     return pd.read_sql(all_flows_query, engine, params={"urban_area_name": urban_area_name})
 
 
+def find_flows_2023(engine: sqlalchemy.engine.Engine, urban_area_name: str) -> pd.DataFrame:
+    all_flows_query = """
+            SELECT "SA22023_V1_00_usual_residence_address"                                        AS origin,
+                   "SA22023_V1_00_workplace_address"                                              AS dest,
+                   ("2023_Walk_or_jog" + "2023_Bicycle")                                               AS "Active Transport",
+                   ("2023_Public_bus" + "2023_Train" + "2023_Ferry")                                        AS "Public Transport",
+                   ("2023_Drive_a_private_car_truck_or_van" + "2023_Drive_a_company_car_truck_or_van") AS "Drive",
+                   "2023_Passenger_in_a_car_truck_van_or_company_bus"                             AS "Passenger",
+                   "2023_Other" AS "Other",
+                   "2023_Total_stated" AS "Total"
+
+            FROM mode_share_flow_2023
+                JOIN sa2_2023 AS workplace ON workplace."SA22023_V1_00"="SA22023_V1_00_workplace_address"
+                JOIN sa2_2023 AS residence ON residence."SA22023_V1_00"="SA22023_V1_00_usual_residence_address"
+
+            WHERE workplace."UR2023_V1_00_NAME"=%(urban_area_name)s 
+            AND residence."UR2023_V1_00_NAME"=%(urban_area_name)s
+
+            ORDER BY "SA22023_V1_00_usual_residence_address", "SA22023_V1_00_workplace_address"
+        """
+    return pd.read_sql(all_flows_query, engine, params={"urban_area_name": urban_area_name})
+
+
 def get_workbook_config_page(urban_area_name: str, columns: List[str]) -> pd.DataFrame:
     return pd.DataFrame(columns=["property", "value"], data=[
         ["title", f"{urban_area_name} Mode Shares"],
@@ -71,6 +94,28 @@ def get_workbook_config_page(urban_area_name: str, columns: List[str]) -> pd.Dat
         ["msg.totalCount.countOfTrips", "{0} of {1} commuters"],
     ])
 
+def get_workbook_config_page_2023(urban_area_name: str, columns: List[str]) -> pd.DataFrame:
+    return pd.DataFrame(columns=["property", "value"], data=[
+        ["title", f"{urban_area_name} Mode Shares"],
+        ["description", f"Means of travel to work for the {urban_area_name} area"],
+        ["source.name", "2023 Census Main means of travel to work by Statistical Area 2"],
+        ["source.url",
+         "https://datafinder.stats.govt.nz/table/121988-2023-census-main-means-of-travel-to-work-by-statistical-area-2/"],
+        ["createdBy.name", "Geospatial Research Institute | Toi Hangarau"],
+        ["createdBy.url", "http://geospatial.ac.nz"],
+        ["mapbox.mapStyle", ""],
+        ["colors.schme", "Default"],
+        ["colors.darkMode", "no"],
+        ["animate.flows", "no"],
+        ["clustering", "no"],
+        ["flows.sheets", ','.join(columns)],
+        ["msg.locationTooltip.incoming", "Inbound commuters"],
+        ["msg.locationTooltip.outgoing", "Outbound commuters"],
+        ["msg.locationTooltip.internal", "Internal commuters"],
+        ["msg.flowTooltip.numOfTrips", "Number of commuters"],
+        ["msg.totalCount.allTrips", "{0} commuters"],
+        ["msg.totalCount.countOfTrips", "{0} of {1} commuters"],
+    ])
 
 def save_flow_map_to_gsheet(gspread_client: gspread.Client,
                             spreadsheet_name: str,
@@ -109,20 +154,6 @@ def save_flow_map_to_gsheet(gspread_client: gspread.Client,
                                                cols=len(sa2_locations.columns))
         flow_sheet.update(df_to_gspread_list(flow_data))
 
-    permissions = spreadsheet.list_permissions()
-    if not any(permission["id"] == "anyoneWithLink" and permission["role"] == "reader"
-               for permission in permissions):
-        spreadsheet.share(email_address=None, perm_type="anyone", role="reader", with_link=True).raise_for_status()
-    if not any(permission["emailAddress"] == EnvVariable.ADMIN_EMAIL and (
-            permission["role"] == "writer" or permission["pendingOwner"])
-               for permission in permissions):
-        transfer_ownership_response = spreadsheet.share(email_address=EnvVariable.ADMIN_EMAIL,
-                                                        perm_type="user",
-                                                        role="writer",
-                                                        notify=True)
-        transfer_ownership_response.raise_for_status()
-        owner_permission_id = transfer_ownership_response.json()["id"]
-        spreadsheet.transfer_ownership(owner_permission_id).raise_for_status()
     return spreadsheet.url
 
 
@@ -185,7 +216,7 @@ def save_flow_map_sheets_2023(engine: sqlalchemy.engine.Engine) -> None:
     for aoi in stats_nz_geographies.AREAS_OF_INTEREST:
         urban_area = aoi.ua_name
         sa2_locations = find_sa2_locations(engine, urban_area)
-        flows = find_flows(engine, urban_area)
+        flows = find_flows_2023(engine, urban_area)
         spreadsheet_name = f"flows_2023_{urban_area}"
         flow_columns = [col for col in flows.columns if col not in {'origin', 'dest'}]
         workbook_config_sheet = get_workbook_config_page(aoi.display_name, flow_columns)
